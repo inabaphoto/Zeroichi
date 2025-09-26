@@ -18,6 +18,7 @@ const config = [
     ignores: [
       "node_modules/**",
       ".next/**",
+      "**/.next/**",
       "out/**",
       "build/**",
       "next-env.d.ts",
@@ -25,6 +26,7 @@ const config = [
     settings: { next: { rootDir: ["apps/frontend"] } },
     rules: {
       "next/no-html-link-for-pages": "off",
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
   {

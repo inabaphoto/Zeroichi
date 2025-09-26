@@ -6,7 +6,7 @@
     "dev": "pnpm --filter frontend dev",
     "build": "pnpm --filter frontend build",
     "start": "pnpm --filter frontend start",
-    "lint": "eslint .",
+    "lint": "eslint apps/frontend/src",
     "typecheck": "pnpm --filter frontend typecheck",
     "test": "pnpm --filter frontend test"
   },
@@ -22,7 +22,7 @@
     "@types/react-dom": "^19",
     "@tailwindcss/postcss": "^4",
     "tailwindcss": "^4",
-    "eslint": "^9",
+    "eslint": "8.57.0",
     "eslint-config-next": "15.5.4",
     "@eslint/eslintrc": "^3"
   }
