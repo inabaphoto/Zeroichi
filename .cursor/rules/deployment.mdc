@@ -1,0 +1,12 @@
+---
+description: Git連動による厳密なコミット紐付けデプロイの実施ルール
+globs: "**/*"
+alwaysApply: true
+---
+
+- 本番デプロイは main への push を唯一のトリガーとする（コミット＝デプロイの紐付け）。
+- ローカルの作業ツリーから `vercel deploy --prebuilt --prod` を直接実行しない（検証用途は Preview のみ）。
+- デプロイ前に `pnpm lint && pnpm typecheck && pnpm test` をパスさせる。
+- 失敗時はロールバック手順（`vercel rollback --prod`）をPRに記載。
+- 機密値はGitHub Secrets（`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`）で管理。
+

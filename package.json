@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "pnpm --filter frontend dev",
+    "build": "pnpm --filter frontend build",
+    "start": "pnpm --filter frontend start",
+    "lint": "eslint .",
+    "typecheck": "pnpm --filter frontend typecheck",
+    "test": "pnpm --filter frontend test"
   },
   "dependencies": {
     "react": "19.1.0",
