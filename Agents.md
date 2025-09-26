@@ -65,3 +65,14 @@ Document the chosen commands in the README once added.
 - `vercel.json` で `buildCommand: pnpm --filter frontend build` を指定し、成果物は `apps/frontend/.next` を参照。
 - VercelのGit連携（推奨）がある場合は、mainへのpushでProduction、PRでPreviewが作成される。
 
+## 運用分離: Production は Actions / Preview は Vercel Git
+- 設定（コード化）: `vercel.json` の `git.deploymentEnabled` で
+  - `production: false`（Productionの自動デプロイを停止。ProductionはCIからのみ）
+  - `preview: true`（PRなどのPreviewは自動）
+- 設定（ダッシュボード側でも確認）:
+  - Vercel Dashboard → Project → Settings → Git → Git Integration
+    - 「Automatically deploy to Production」= Off（Production）
+    - 「Automatically expose Preview Deployments」= On（Preview）
+- 運用:
+  - Production: GitHub Actions（mainへのpush）でのみデプロイ
+  - Preview: PR作成/更新時にVercelが自動で生成

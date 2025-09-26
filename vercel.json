@@ -2,6 +2,11 @@
   "framework": "nextjs",
   "installCommand": "pnpm install",
   "buildCommand": "pnpm --filter frontend build",
-  "outputDirectory": "apps/frontend/.next"
+  "outputDirectory": "apps/frontend/.next",
+  "git": {
+    "deploymentEnabled": {
+      "production": false,
+      "preview": true
+    }
+  }
 }
-
