@@ -223,14 +223,14 @@
             "title": "Prod login E2E check (Playwright MCP)",
             "description": "Navigate /login, fill creds, click login, expect redirect /tenant; capture errors.",
             "details": "",
-            "status": "in-progress",
+            "status": "blocked",
             "dependencies": [],
             "parentTaskId": 13,
-            "updatedAt": "2025-09-27T04:37:40.164Z",
+            "updatedAt": "2025-09-27T04:40:32.560Z",
             "parentId": "undefined"
           }
         ],
-        "updatedAt": "2025-09-27T04:37:40.164Z"
+        "updatedAt": "2025-09-27T04:40:32.560Z"
       },
       {
         "id": "14",
@@ -424,7 +424,7 @@
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-09-27T04:37:40.167Z",
+      "lastModified": "2025-09-27T04:40:32.563Z",
       "taskCount": 15,
       "completedCount": 6,
       "tags": [
