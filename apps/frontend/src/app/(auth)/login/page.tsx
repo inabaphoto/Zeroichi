@@ -62,6 +62,7 @@ export default function LoginPage() {
             placeholder="you@example.com"
             autoComplete="email"
             value={email}
+            data-testid="email-input"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -73,14 +74,15 @@ export default function LoginPage() {
             placeholder="••••••••"
             autoComplete="current-password"
             value={password}
+            data-testid="password-input"
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="flex items-center gap-2 pt-2">
-          <button className="rounded bg-black px-4 py-2 text-white disabled:opacity-50" onClick={signIn} disabled={status === "running"}>
+          <button className="rounded bg-black px-4 py-2 text-white disabled:opacity-50" onClick={signIn} disabled={status === "running"} data-testid="login-button">
             ログイン
           </button>
-          <button className="rounded border px-4 py-2 disabled:opacity-50" onClick={sendMagicLink} disabled={status === "running" || !email.trim()}>
+          <button className="rounded border px-4 py-2 disabled:opacity-50" onClick={sendMagicLink} disabled={status === "running" || !email.trim()} data-testid="magic-button">
             マジックリンク送信
           </button>
         </div>
