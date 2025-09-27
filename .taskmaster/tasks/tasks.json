@@ -2,7 +2,7 @@
   "master": {
     "tasks": [
       {
-        "id": 1,
+        "id": "1",
         "title": "プロジェクト環境とリポジトリの初期構築",
         "description": "Next.js 15（App Router / Server Actions）と Node.js（Vercel Functions / Edge）を用いたモノレポ基盤を整備し、Supabase を含む主要サービスとの連携と CI/CD パイプラインを確立する。",
         "details": "- GitHub リポジトリを初期化し、`apps/frontend`（Next.js 15）と必要に応じた `apps/api` などの構成方針を決定する。\n- `pnpm` ワークスペースまたは Nx 等を利用してフロントエンド／バックエンドのモジュール分離と共通パッケージ管理を行う。\n- Vercel プロジェクトとのリンクを設定し、`vercel.json` で monorepo 向けの build / output 設定を行う。\n- Supabase プロジェクトを紐付け、`.env.local` および GitHub Actions / Vercel 環境変数を整備する。\n- Husky 等を導入して `pnpm lint && pnpm typecheck && pnpm test` をプリコミットで走らせる仕組みを用意する。\n- README へ `make setup / make dev / make test / make build` など開発者向けコマンドを記載する。",
@@ -13,7 +13,7 @@
         "subtasks": []
       },
       {
-        "id": 2,
+        "id": "2",
         "title": "SupabaseスキーマとRLSポリシーの設計・適用",
         "description": "Supabase の PostgreSQL スキーマおよび主要テーブルの設計と Row Level Security（RLS）ポリシーの策定・適用を行う。",
         "details": "- tenants, users, tenant_users, apps, app_memberships, app_env_vars, field_templates, field_mappings, save_records, save_fields, artifacts, audit_log, tenant_plans, entitlements, billing_events を定義し、tenant_id ベースのデータ分離を徹底する。\n- 各テーブルに SELECT/INSERT/UPDATE/DELETE 用の RLS ポリシーを設定し、役割に応じた書き込み制御を行う。\n- Storage のディレクトリ構成と暗号化方針を策定する。",
@@ -21,12 +21,12 @@
         "status": "done",
         "priority": "high",
         "dependencies": [
-          1
+          "1"
         ],
         "subtasks": []
       },
       {
-        "id": 3,
+        "id": "3",
         "title": "Supabase AuthとJWTによるテナントコンテキストの統合",
         "description": "Supabase Auth（メール/パスワード、マジックリンク）を利用した認証基盤を構築し、すべての API リクエストにおいて JWT に tenant_id を必ず含める仕組みを整備する。",
         "details": "- Supabase Auth プロバイダー（Email/Password, Magic Link）を設定する。\n- ログイン後に tenant_id を含む JWT を発行し、更新用ルールを定義する。\n- Next.js サーバー／クライアント双方でセッション情報を保持し、アクティブテナントを UI に表示する。\n- API レイヤーでヘッダーの tenant_id を信用せず JWT クレームから解決する共通ミドルウェアを実装する。",
@@ -34,12 +34,12 @@
         "status": "done",
         "priority": "high",
         "dependencies": [
-          2
+          "2"
         ],
         "subtasks": []
       },
       {
-        "id": 4,
+        "id": "4",
         "title": "テナント・ユーザー管理APIの実装",
         "description": "テナント作成、ユーザー招待、ロール割り当て、メンバーシップ管理のための API と最小 UI を実装する。",
         "details": "- POST /api/tenants/:id/invitations, POST /api/invitations/accept, GET /api/tenants/:id/users, PATCH /api/tenant_users/:id を実装し、RLS とロールチェックを徹底する。\n- 招待～受諾～ロール変更の UI を最小構成で提供する。\n- 監査ログと通知連携（エラー時アラート）を組み込む。",
@@ -47,7 +47,7 @@
         "status": "done",
         "priority": "high",
         "dependencies": [
-          3
+          "3"
         ],
         "subtasks": [
           {
@@ -57,7 +57,8 @@
             "dependencies": [],
             "details": "Create the route handler file at apps/frontend/src/app/api/tenants/route.ts. Implement POST method to accept tenant creation requests, validate input, create tenant record in Supabase using admin client, assign the initial owner role to the creator, and handle errors with appropriate HTTP status codes (401/403/422/500). Ensure RLS policies and role checks are enforced. Return the created tenant data in the response.",
             "status": "done",
-            "testStrategy": "Unit test input validation and role assignment logic with Vitest. Integration test tenant creation flow including authorization checks and database persistence."
+            "testStrategy": "Unit test input validation and role assignment logic with Vitest. Integration test tenant creation flow including authorization checks and database persistence.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -68,7 +69,8 @@
             ],
             "details": "Create dynamic route handler at apps/frontend/src/app/api/tenants/[id]/users/route.ts. Implement GET method to fetch tenant members from Supabase using the admin client. Validate tenant ID parameter, enforce requireTenantContext authorization, and apply RLS policies. Return user list with roles and membership status. Handle errors with proper HTTP status codes.",
             "status": "done",
-            "testStrategy": "Unit test parameter validation and authorization middleware. Integration test member listing with various user roles to confirm access restrictions."
+            "testStrategy": "Unit test parameter validation and authorization middleware. Integration test member listing with various user roles to confirm access restrictions.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -79,7 +81,8 @@
             ],
             "details": "Develop route handlers at apps/frontend/src/app/api/tenants/[id]/invitations/route.ts and apps/frontend/src/app/api/invitations/accept/route.ts. For invitations, validate input (email or userId), check inviter's permissions, create pending membership in Supabase, and send invitation notification. For acceptance, validate token or invitation ID, update membership status, and assign roles accordingly. Implement error handling and RLS enforcement.",
             "status": "done",
-            "testStrategy": "Unit test invitation input validation and acceptance logic. Integration test full invitation flow including pending state creation, acceptance, and role assignment."
+            "testStrategy": "Unit test invitation input validation and acceptance logic. Integration test full invitation flow including pending state creation, acceptance, and role assignment.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -91,7 +94,8 @@
             ],
             "details": "Create route handlers at apps/frontend/src/app/api/tenant_users/[id]/route.ts supporting PATCH and DELETE methods. PATCH updates user roles within a tenant after validating the requester's permissions. DELETE removes a member from the tenant. Both methods must handle errors, enforce RLS, and log audit events.",
             "status": "done",
-            "testStrategy": "Unit test role validation and deletion logic. Integration test role change and deletion flows with different user roles to verify authorization and data integrity."
+            "testStrategy": "Unit test role validation and deletion logic. Integration test role change and deletion flows with different user roles to verify authorization and data integrity.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -105,7 +109,8 @@
             ],
             "details": "Build React components using Next.js 15 App Router conventions. Include forms for user invitation and role changes, a table to display tenant members, and UI elements to accept invitations. Use fetch with Authorization: Bearer header containing Supabase token. Implement input validation, loading states, and error handling for HTTP 401/403/422/500 responses.",
             "status": "done",
-            "testStrategy": "Manual and automated UI tests to verify API integration, form validation, and error display. E2E tests simulating invitation to acceptance to role change workflows."
+            "testStrategy": "Manual and automated UI tests to verify API integration, form validation, and error display. E2E tests simulating invitation to acceptance to role change workflows.",
+            "parentId": "undefined"
           },
           {
             "id": 6,
@@ -118,12 +123,13 @@
             ],
             "details": "Implement audit log writes in each API handler after successful operations using a centralized logging utility. Integrate error notification hooks triggered on exceptions or failed operations. Ensure logs capture user, tenant, action type, timestamp, and outcome. Configure notification channels for error alerts.",
             "status": "done",
-            "testStrategy": "Unit test audit log calls and error notification triggers. Integration tests to verify logs are created and notifications sent on simulated errors."
+            "testStrategy": "Unit test audit log calls and error notification triggers. Integration tests to verify logs are created and notifications sent on simulated errors.",
+            "parentId": "undefined"
           }
         ]
       },
       {
-        "id": 5,
+        "id": "5",
         "title": "アプリ登録・管理APIの実装",
         "description": "テナント配下のアプリケーションについて、登録・更新・一覧取得・削除（アーカイブ／完全削除）を行う API を実装し、Dify アプリキーやメタデータを安全に管理する。",
         "details": "- POST /api/apps, GET /api/tenants/:id/apps, PATCH /api/apps/:id, DELETE /api/apps/:id を実装する。\n- Dify アプリキーやメタデータを暗号化保存し、ロールごとのアクセス制御を適用する。\n- アプリ登録・管理のための最小 UI（登録フォーム、一覧、アーカイブ操作）を提供する。",
@@ -131,7 +137,7 @@
         "status": "done",
         "priority": "high",
         "dependencies": [
-          4
+          "4"
         ],
         "subtasks": [
           {
@@ -141,7 +147,8 @@
             "dependencies": [],
             "details": "Develop the following API endpoints: POST /api/apps for app creation, GET /api/tenants/:id/apps for listing apps under a tenant, PATCH /api/apps/:id for updating app details, and DELETE /api/apps/:id for archiving or complete deletion. Ensure proper request validation, response formatting, and adherence to RESTful principles. Use resource-oriented design with consistent URI naming and HTTP methods.",
             "status": "done",
-            "testStrategy": "Unit and integration tests for each endpoint verifying correct CRUD operations, input validation, and response structure."
+            "testStrategy": "Unit and integration tests for each endpoint verifying correct CRUD operations, input validation, and response structure.",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -152,7 +159,8 @@
             ],
             "details": "Use requireTenantContext middleware to extract tenant_id from JWT and enforce role-based permissions: only owners and admins can create, update, or delete apps; members and viewers can view app lists. Implement row-level security (RLS) to prevent cross-tenant data access. Return appropriate HTTP status codes (403/401) on unauthorized access.",
             "status": "done",
-            "testStrategy": "Test role-based access control with various user roles and tenant contexts, including negative tests for unauthorized access."
+            "testStrategy": "Test role-based access control with various user roles and tenant contexts, including negative tests for unauthorized access.",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -164,7 +172,8 @@
             ],
             "details": "Encrypt dify_api_key using AES-GCM with ENCRYPTION_KEY_BASE64 before storing in the database. In API responses, never return the raw key; instead, provide a has_key boolean flag indicating presence. Implement key rotation and secure metadata management. Integrate audit logging (logAudit) and error notification (notifyError) hooks on success and failure of encryption-related operations.",
             "status": "done",
-            "testStrategy": "Unit tests for encryption/decryption utilities, integration tests verifying encrypted storage and masked API responses."
+            "testStrategy": "Unit tests for encryption/decryption utilities, integration tests verifying encrypted storage and masked API responses.",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -177,7 +186,8 @@
             ],
             "details": "Implement frontend components for app registration form, app list display with pagination if needed, controls for archiving and deleting apps, and inline editing for app name and type. Include UI elements for rotating the dify_api_key securely. Ensure UI respects role-based permissions and tenant context. Connect UI to backend APIs with proper error handling and loading states.",
             "status": "done",
-            "testStrategy": "Component and integration tests for UI functionality, E2E tests covering full app lifecycle operations."
+            "testStrategy": "Component and integration tests for UI functionality, E2E tests covering full app lifecycle operations.",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -191,25 +201,39 @@
             ],
             "details": "Write unit tests for encryption utilities (1-2 cases), API endpoint tests covering authorization, encryption, and CRUD operations, and E2E tests simulating app registration, update, archive, deletion, and listing flows. Integrate logAudit calls on successful operations and notifyError on failures for audit and alerting. Verify RLS prevents cross-tenant access in tests.",
             "status": "done",
-            "testStrategy": "Automated unit, integration, and E2E tests with coverage reports; manual verification of audit logs and error notifications."
+            "testStrategy": "Automated unit, integration, and E2E tests with coverage reports; manual verification of audit logs and error notifications.",
+            "parentId": "undefined"
           }
         ]
       },
       {
-        "id": 13,
+        "id": "13",
         "title": "Difyチャットフロー共通基盤（APIクライアント・メタデータ・タイムアウト・監査ログ連携）の構築",
         "description": "Zeroichi⇔Dify 間のチャットフロー連携に必要な共通モジュール（API クライアント、メタデータ注入、タイムアウト制御、監査ログ連携）を実装し、アプリ種別実装の基盤を整備する。基盤の初期スケルトン（Difyクライアント、型、エラーマッピング、タイムアウト、監査/通知連携）を追加し、型チェック・ビルド・テスト通過を確認。以降はタスク14のWebhook共通処理とエラー方針に接続予定。",
         "status": "in-progress",
         "dependencies": [
-          5
+          "5"
         ],
         "priority": "medium",
         "details": "- Dify チャット API を呼び出す共通クライアントを作成し、AbortController によるタイムアウト制御とキャンセルを組み込む。\n- tenant_id / app_id / user_id / req_id を含むメタデータ構造体を定義し、全呼び出しで強制付与する。\n- Dify のエラーコードと Zeroichi 内部コードのマッピングモジュールを実装し、Next.js API 規約に沿ったレスポンス整形を行う。\n- 監査ログ連携・Slack 通知を共通ユーティリティとして提供する。\n- 双方向（Zeroichi→Dify / Dify→Zeroichi）で利用できるよう型定義と共通インターフェースを整える。\n- 基盤の初期スケルトンを完成させ、型チェック・ビルド・テストが通過していることを確認。\n- 今後はタスク14のWebhook共通処理およびエラー方針と接続し、連携を強化する。",
         "testStrategy": "- API クライアントの正常・異常（タイムアウト、キャンセル、APIエラー）テストを実施。\n- 擬似 Dify サーバーを用いた統合テストでメタデータ注入・監査記録を検証。\n- エラーマッピングが想定通りのレスポンスコード／メッセージを返すことを確認。\n- 型チェック・ビルド・テストの自動通過を確認済み。\n- 今後、タスク14のWebhook共通処理との統合テストを計画。",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Prod login E2E check (Playwright MCP)",
+            "description": "Navigate /login, fill creds, click login, expect redirect /tenant; capture errors.",
+            "details": "",
+            "status": "in-progress",
+            "dependencies": [],
+            "parentTaskId": 13,
+            "updatedAt": "2025-09-27T04:37:40.164Z",
+            "parentId": "undefined"
+          }
+        ],
+        "updatedAt": "2025-09-27T04:37:40.164Z"
       },
       {
-        "id": 14,
+        "id": "14",
         "title": "Difyチャットフロー基盤の整備",
         "description": "B/A/ハイブリッド各実装に先立ち、Zeroichi⇔Dify 連携の共通基盤を整える。API クライアント、メタデータ強制、Webhook 共通処理、監査ログ連携、タイムアウト制御、エラーハンドリング指針などを包括的に実装する。",
         "details": "- Supabase JWT から tenant_id / app_id / user_id を抽出し、リクエスト・レスポンスのメタデータに必ず付与する。\n- runId / req_id の生成ポリシーを統一し、監査ログや UI でトレースできるようにする。\n- Webhook ミドルウェアを作成し、署名検証・tenant/app/run_id の一致検証・req_id ベースの冪等制御を実装する。\n- Dify エラーコードを Zeroichi のエラー体系にマッピングし、Next.js API レスポンス規約に沿った JSON を返す。\n- 成功／失敗を問わず監査ログへ書き込む共通ユーティリティと、重大エラー時に Slack / メールへ通知するフックを用意する。",
@@ -217,16 +241,16 @@
         "status": "pending",
         "priority": "high",
         "dependencies": [
-          1,
-          2,
-          3,
-          4,
-          13
+          "1",
+          "2",
+          "3",
+          "4",
+          "13"
         ],
         "subtasks": []
       },
       {
-        "id": 15,
+        "id": "15",
         "title": "アプリ環境変数管理UIと権限制御の実装",
         "description": "スーパー管理者がアプリごとの環境変数（app_env_vars）を安全に登録・更新・閲覧できる UI と API を実装し、暗号化と監査ログを徹底する。",
         "details": "- app_env_vars テーブル操作用 API（一覧／登録／更新／履歴参照／無効化）を実装し、スーパー管理者ロールのみ許可する RLS を設定。\n- 値は Supabase の暗号化機能を使い保存し、UI 上ではマスク表示・コピー制限・参照ログを付与する。\n- UI は アプリ選択 → 環境変数一覧 → 新規登録・編集モーダル → 監査ログリンク という動線を提供。\n- 変更履歴・最終更新者・参照回数を表示し、監査ログに記録する。",
@@ -234,9 +258,9 @@
         "status": "done",
         "priority": "medium",
         "dependencies": [
-          4,
-          5,
-          14
+          "4",
+          "5",
+          "14"
         ],
         "subtasks": [
           {
@@ -246,7 +270,8 @@
             "dependencies": [],
             "details": "SupabaseのRLS機能を用いて、owner/adminロールのみがapp_env_varsテーブルの登録・更新・削除操作を行えるように設定する。APIはNext.js API RoutesまたはEdge Functionsで実装し、JWTからtenant_idやユーザー権限を検証。APIレスポンスでは環境変数の値は返さず、has_valueフラグのみ返却する仕様とする。",
             "status": "done",
-            "testStrategy": "API単体テストで認可制御が正しく機能することを検証。スーパー管理者以外のアクセスは403エラーとなることを確認。"
+            "testStrategy": "API単体テストで認可制御が正しく機能することを検証。スーパー管理者以外のアクセスは403エラーとなることを確認。",
+            "parentId": "undefined"
           },
           {
             "id": 2,
@@ -257,7 +282,8 @@
             ],
             "details": "暗号化・復号処理は共通ユーティリティとして実装し、API登録・更新時に暗号化、UI表示時は値を返さずマスク表示とする。暗号化キーは環境変数から安全に読み込み、キー管理を厳格に行う。暗号化処理の性能と安全性を考慮し、AES-GCMのnonce管理も適切に行う。",
             "status": "done",
-            "testStrategy": "ユーティリティの単体テストで暗号化・復号が正しく行われることを検証。暗号化後の値がDBに保存されていることを確認。"
+            "testStrategy": "ユーティリティの単体テストで暗号化・復号が正しく行われることを検証。暗号化後の値がDBに保存されていることを確認。",
+            "parentId": "undefined"
           },
           {
             "id": 3,
@@ -269,7 +295,8 @@
             ],
             "details": "Next.jsのApp Routerを用い、/apps配下にアプリ一覧と環境変数管理画面を作成。環境変数一覧はAPIから取得し、値はマスク表示。編集モーダルでは登録・更新操作を行い、API呼び出しを行う。監査ログへのリンクは別画面またはモーダルで表示し、変更履歴・最終更新者・参照回数を表示する。",
             "status": "done",
-            "testStrategy": "コンポーネント単体テストでマスク表示・コピー制限・履歴表示を検証。E2Eテストでスーパー管理者の操作フローを確認。"
+            "testStrategy": "コンポーネント単体テストでマスク表示・コピー制限・履歴表示を検証。E2Eテストでスーパー管理者の操作フローを確認。",
+            "parentId": "undefined"
           },
           {
             "id": 4,
@@ -281,7 +308,8 @@
             ],
             "details": "APIの各操作ハンドラに監査ログ記録処理を組み込み、操作内容・ユーザー情報・タイムスタンプを記録。環境変数の閲覧時は参照回数をDBにインクリメントし、UIに反映。エラー時はSlackやメール通知を行うフックを用意し、運用監視を強化する。",
             "status": "done",
-            "testStrategy": "監査ログの記録が正しく行われているかAPI統合テストで検証。エラー発生時に通知が送信されることを確認。"
+            "testStrategy": "監査ログの記録が正しく行われているかAPI統合テストで検証。エラー発生時に通知が送信されることを確認。",
+            "parentId": "undefined"
           },
           {
             "id": 5,
@@ -295,12 +323,13 @@
             ],
             "details": "API単体・結合テストで認可制御や暗号化処理を検証。UIコンポーネントテストでマスク表示や履歴表示を確認。E2Eテストでスーパー管理者のログインから環境変数登録・更新・監査ログ確認までの一連操作を検証。ドキュメントにはAPI仕様、UI操作手順、監査ログの見方を記載する。",
             "status": "done",
-            "testStrategy": "Vitestによるユニット・統合テスト、PlaywrightによるE2Eテストを実施。テストカバレッジを高く保ち、セキュリティ要件を満たすことを確認。"
+            "testStrategy": "Vitestによるユニット・統合テスト、PlaywrightによるE2Eテストを実施。テストカバレッジを高く保ち、セキュリティ要件を満たすことを確認。",
+            "parentId": "undefined"
           }
         ]
       },
       {
-        "id": 6,
+        "id": "6",
         "title": "Bタイプ実行フロー向けWizard UIの実装",
         "description": "Bタイプアプリケーションのためのウィザード UI を実装し、テンプレート選択・入力・プレビュー・Dify 実行までの流れを整える。",
         "details": "- テンプレート選択→入力フォーム→プレビュー→実行ボタンのステップ UI を用意し、field_templates から動的生成する。\n- 実行時に共通基盤を介して Dify API を呼び出し、runId と req_id を UI に表示する。\n- 各ステップで説明文とバリデーションを提示し、ユーザーが迷わない UX を設計する。",
@@ -308,13 +337,13 @@
         "status": "pending",
         "priority": "medium",
         "dependencies": [
-          14,
-          13
+          "14",
+          "13"
         ],
         "subtasks": []
       },
       {
-        "id": 7,
+        "id": "7",
         "title": "Aタイプ保存フローとWebhook処理の実装",
         "description": "Aタイプのチャット出力を保存する API と、Dify からの署名付き Webhook を処理する仕組みを実装する。",
         "details": "- 保存 API（作成／編集／論理削除／復元／物理削除）とバリデーションを実装し、監査ログを残す。\n- Webhook ミドルウェア（署名検証・冪等性・tenant/app/run_id 照合）を共通基盤上で利用する。\n- 保存結果を UI に 3 秒以内で反映し、runId・req_id と紐づけて表示する。",
@@ -322,13 +351,13 @@
         "status": "pending",
         "priority": "medium",
         "dependencies": [
-          14,
-          13
+          "14",
+          "13"
         ],
         "subtasks": []
       },
       {
-        "id": 8,
+        "id": "8",
         "title": "ハイブリッド保存フローの実装",
         "description": "Bタイプ実行結果から選択したフィールドを Aタイプ保存として登録できるハイブリッド保存フローを実装する。",
         "details": "- B実行後に「選択して保存」ボタンを表示し、field_templates に基づいた項目選択 UI を提供する。\n- 選択データを A 保存 API に渡す変換ロジックを実装する。\n- 保存後に詳細画面で runId / req_id / 選択フィールドを確認できるようにする。",
@@ -336,12 +365,12 @@
         "status": "pending",
         "priority": "medium",
         "dependencies": [
-          7
+          "7"
         ],
         "subtasks": []
       },
       {
-        "id": 9,
+        "id": "9",
         "title": "監査ログとアラート基盤の実装",
         "description": "認証・API 操作・Dify 実行／Webhook・RLS・課金など主要アクションを監査ログに記録し、エラー発生時には自動でアラートを送信する基盤を構築する。",
         "details": "- audit_log テーブルへ tenant_id / user_id / scope / action / status / code / message / req_id / meta を記録するユーティリティを実装。\n- Slack / メール等の通知基盤と連携し、重大エラーで即時アラートする。\n- req_id からトレーサビリティをたどれるリンクを UI に実装する。",
@@ -349,12 +378,12 @@
         "status": "pending",
         "priority": "high",
         "dependencies": [
-          8
+          "8"
         ],
         "subtasks": []
       },
       {
-        "id": 10,
+        "id": "10",
         "title": "セキュリティとコンプライアンス対策の徹底",
         "description": "全テーブルに対する RLS、機微情報の暗号化、PII のマスキング／ハッシュ化、テナント・ユーザー・IP 単位のレートリミットを実装し、システム全体のセキュリティとコンプライアンスを強化する。",
         "details": "- Supabase 全テーブルで RLS を有効化し、操作別ポリシーを設定する。\n- app_env_vars.value_encrypted など機微値の暗号化と参照ログを整備する。\n- 署名付き URL と参照 ID のみで Storage を扱い、直リンク禁止を徹底する。\n- ソフトレートリミットと X-Req-Id の付与でリクエスト追跡性を強化する。",
@@ -362,12 +391,12 @@
         "status": "pending",
         "priority": "high",
         "dependencies": [
-          9
+          "9"
         ],
         "subtasks": []
       },
       {
-        "id": 11,
+        "id": "11",
         "title": "TDDと自動テストカバレッジの確立",
         "description": "Serena MCP・Playwright MCP・Vitest/Jest を導入し、TDD と自動テストカバレッジ体制（行 85% / 分岐 75%）を確立、Serena カバレッジ未達 PR をブロックする。",
         "details": "- 主要業務フローごとに Serena 仕様を作成し、CI でカバレッジ 100% を強制する。\n- Playwright の E2E デモシナリオ（B 実行、A 保存、ハイブリッド）を整備する。\n- Vitest/Jest でユニット・統合テストをカバレッジ基準以上に維持する。",
@@ -375,12 +404,12 @@
         "status": "pending",
         "priority": "high",
         "dependencies": [
-          10
+          "10"
         ],
         "subtasks": []
       },
       {
-        "id": 12,
+        "id": "12",
         "title": "デモ環境の準備と受け入れ基準の検証",
         "description": "デモ用テナント・データの投入、Dify/Supabase/Vercel 設定、および P0 デモ受け入れ基準の検証を行う。",
         "details": "- デモ用テナント・ユーザー・アプリ・field_templates/mappings を seed する。\n- Dify アプリ、API キー、Webhook URL、シークレットの設定を行う。\n- B 実行（ウィザード→runId）、A 保存（保存→3 秒以内に一覧反映）、ハイブリッド保存、監査ログ記録、RLS 分離が成立することを確認。",
@@ -388,15 +417,19 @@
         "status": "pending",
         "priority": "high",
         "dependencies": [
-          11
+          "11"
         ],
         "subtasks": []
       }
     ],
     "metadata": {
-      "created": "2025-09-26T16:08:12.786Z",
-      "updated": "2025-09-26T18:08:56.877Z",
-      "description": "Tasks for master context"
+      "version": "1.0.0",
+      "lastModified": "2025-09-27T04:37:40.167Z",
+      "taskCount": 15,
+      "completedCount": 6,
+      "tags": [
+        "master"
+      ]
     }
   }
 }

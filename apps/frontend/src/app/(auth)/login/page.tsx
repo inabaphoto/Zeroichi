@@ -55,7 +55,7 @@ export default function LoginPage() {
           <div className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">{message}</div>
         )}
         <div className="space-y-2">
-          <label className="block text-sm text-neutral-700">メールアドレス</label>
+          <label htmlFor="login-email" className="block text-sm text-neutral-700">メールアドレス</label>
           <input
             type="email"
             className="w-full rounded border px-3 py-2"
@@ -63,11 +63,12 @@ export default function LoginPage() {
             autoComplete="email"
             value={email}
             data-testid="email-input"
+            id="login-email"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="space-y-2">
-          <label className="block text-sm text-neutral-700">パスワード</label>
+          <label htmlFor="login-password" className="block text-sm text-neutral-700">パスワード</label>
           <input
             type="password"
             className="w-full rounded border px-3 py-2"
@@ -75,6 +76,7 @@ export default function LoginPage() {
             autoComplete="current-password"
             value={password}
             data-testid="password-input"
+            id="login-password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
