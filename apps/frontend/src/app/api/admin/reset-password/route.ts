@@ -16,16 +16,22 @@ export async function POST(request: Request) {
     }
 
     const admin = getSupabaseAdminClient();
-    const { data: userRow, error: findErr } = await admin
-      .schema("auth")
-      .from("users")
-      .select("id, email")
-      .eq("email", email)
-      .maybeSingle();
-    if (findErr || !userRow) {
-      return NextResponse.json({ code: "NOT_FOUND", message: findErr?.message ?? "User not found" }, { status: 404 });
+    // list users via auth admin and locate by email
+    let targetId: string | null = null;
+    let page = 1;
+    while (!targetId && page <= 10) {
+      const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 200 });
+      if (error) {
+        return NextResponse.json({ code: "LIST_FAILED", message: error.message }, { status: 500 });
+      }
+      targetId = data.users.find((u: any) => u.email === email)?.id ?? null;
+      if (data.users.length < 200) break;
+      page += 1;
     }
-    const { error: updErr } = await admin.auth.admin.updateUserById(userRow.id, { password });
+    if (!targetId) {
+      return NextResponse.json({ code: "NOT_FOUND", message: "User not found" }, { status: 404 });
+    }
+    const { error: updErr } = await admin.auth.admin.updateUserById(targetId, { password });
     if (updErr) {
       return NextResponse.json({ code: "UPDATE_FAILED", message: updErr.message }, { status: 500 });
     }
@@ -35,4 +41,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ code: "INTERNAL_ERROR", message }, { status: 500 });
   }
 }
-
