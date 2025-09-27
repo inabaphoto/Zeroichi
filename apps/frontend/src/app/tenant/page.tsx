@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { SessionInfo } from "@/components/session-info";
+import { AppShell } from "@/components/app-shell";
 
 type Member = { user_id: string; role: "owner" | "admin" | "member" | "viewer" };
 
@@ -231,7 +232,8 @@ export default function TenantAdminPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 p-6">
+    <AppShell>
+    <div className="mx-auto max-w-4xl space-y-6">
       <h1 className="text-2xl font-semibold">テナント・ユーザー管理（最小UI）</h1>
       <SessionInfo />
 
@@ -356,5 +358,6 @@ export default function TenantAdminPage() {
         </div>
       )}
     </div>
+    </AppShell>
   );
 }

@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { useEffect, useState, Fragment } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { AppShell } from "@/components/app-shell";
 
 type AppRow = { id: string; name: string; type: string | null; archived_at: string | null };
 type EnvVarRow = { key: string; has_value: boolean; disabled: boolean; updated_at?: string | null };
@@ -220,7 +221,8 @@ export default function AppsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 p-6">
+    <AppShell>
+    <div className="mx-auto max-w-4xl space-y-6">
       <h1 className="text-2xl font-semibold">アプリ登録・管理（最小UI）</h1>
 
       <div className="rounded-md border p-4">
@@ -350,5 +352,6 @@ export default function AppsPage() {
         </div>
       )}
     </div>
+    </AppShell>
   );
 }

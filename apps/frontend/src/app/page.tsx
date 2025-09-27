@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { SessionInfo } from "@/components/session-info";
+import { AppShell } from "@/components/app-shell";
 
 export default function Home() {
   return (
-    <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-8 px-6 py-12">
+    <AppShell>
+    <div className="mx-auto max-w-4xl flex flex-col gap-8 px-2 py-4 sm:px-6 sm:py-8">
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold text-neutral-900">Zeroichi ダッシュボード</h1>
         <p className="text-sm text-neutral-600">Supabase Auth とマルチテナント設定の検証用 UI です。ログイン状況とテナントコンテキストを表示します。</p>
@@ -27,6 +29,6 @@ export default function Home() {
         <p className="text-xs text-neutral-500">ログイン後にこのページへ戻ると、JWT に含まれる tenant_id／ロール情報が表示されます。</p>
       </section>
     </div>
+    </AppShell>
   );
 }
-
