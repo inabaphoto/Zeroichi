@@ -39,7 +39,15 @@ export async function GET(request: Request, { params }: any) {
       return NextResponse.json({ code: "ENV_LIST_FAILED", message: error.message }, { status: 500 });
     }
     await logAudit({ scope: "app_env", action: "list", status: "success", tenantId: ctx.tenantId, actorId: ctx.userId, meta: { appId: params.appId } });
-    const vars = (data ?? []).map((v) => ({ key: v.key, has_value: !!v.value_encrypted, disabled: !!v.disabled, updated_at: v.updated_at, created_at: v.created_at }));
+    const vars = (data ?? []).map(
+      (v: { key: string; value_encrypted: unknown; disabled: unknown; updated_at?: string | null; created_at?: string | null }) => ({
+        key: v.key,
+        has_value: !!v.value_encrypted,
+        disabled: !!v.disabled,
+        updated_at: v.updated_at,
+        created_at: v.created_at,
+      })
+    );
     return NextResponse.json({ code: "OK", vars });
   } catch (error) {
     if (error instanceof Error && (error.name === "UnauthorizedError" || error.name === "ForbiddenError")) {

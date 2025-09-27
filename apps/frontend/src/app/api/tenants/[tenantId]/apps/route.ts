@@ -22,7 +22,10 @@ export async function GET(request: Request, { params }: any) {
       return NextResponse.json({ code: "APP_LIST_FAILED", message: error.message }, { status: 500 });
     }
     await logAudit({ scope: "app", action: "list", status: "success", tenantId: ctx.tenantId, actorId: ctx.userId });
-    const apps = (data ?? []).map((a) => ({ ...a, has_key: undefined }));
+    const apps = (data ?? []).map((a: { id: string; name: string; type: string | null; archived_at: string | null; created_at?: string | null }) => ({
+      ...a,
+      has_key: undefined,
+    }));
     return NextResponse.json({ code: "OK", apps });
   } catch (error) {
     if (error instanceof Error && (error.name === "UnauthorizedError" || error.name === "ForbiddenError")) {
@@ -34,4 +37,3 @@ export async function GET(request: Request, { params }: any) {
     return NextResponse.json({ code: "INTERNAL_ERROR", message }, { status: 500 });
   }
 }
-

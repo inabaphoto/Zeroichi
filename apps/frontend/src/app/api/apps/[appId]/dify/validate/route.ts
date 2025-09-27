@@ -33,7 +33,9 @@ export async function POST(request: Request, { params }: any) {
       await notifyError("Fetch env for dify validate failed", { tenantId: ctx.tenantId, appId: params.appId, error: varsError.message });
       return NextResponse.json({ code: "ENV_FETCH_FAILED", message: varsError.message }, { status: 500 });
     }
-    const map = new Map<string, string | null>(vars?.map((v) => [v.key, v.value_encrypted as string | null]) || []);
+    const map = new Map<string, string | null>(
+      (vars ?? []).map((v: { key: string; value_encrypted: string | null }) => [v.key, v.value_encrypted])
+    );
     const apiKeyEnc = map.get("DIFY_API_KEY");
     if (!apiKeyEnc) {
       return NextResponse.json({ code: "MISSING_DIFY_API_KEY", message: "DIFY_API_KEY is not set for this app." }, { status: 422 });
