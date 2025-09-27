@@ -30,7 +30,7 @@ export async function PATCH(request: Request, { params }: any) {
       } else if (isNonEmptyString(body.difyApiKey)) {
         try {
           updates.dify_api_key_encrypted = encryptString(body.difyApiKey!);
-        } catch (e) {
+        } catch (_e) {
           await notifyError("Encryption failed for difyApiKey (update)", { tenantId: ctx.tenantId, actorId: ctx.userId, appId: params.appId });
           return NextResponse.json({ code: "ENCRYPTION_FAILED", message: "Failed to encrypt dify_api_key" }, { status: 500 });
         }
@@ -111,4 +111,3 @@ export async function DELETE(request: Request, { params }: any) {
     return NextResponse.json({ code: "INTERNAL_ERROR", message }, { status: 500 });
   }
 }
-

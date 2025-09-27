@@ -35,7 +35,7 @@ export async function PATCH(request: Request, { params }: any) {
       } else if (isNonEmptyString(body.value)) {
         try {
           updates.value_encrypted = encryptString(body.value!);
-        } catch (e) {
+        } catch (_e) {
           await notifyError("Env value encryption failed (update)", { appId: params.appId, key: params.key });
           return NextResponse.json({ code: "ENCRYPTION_FAILED", message: "Failed to encrypt value" }, { status: 500 });
         }
@@ -97,4 +97,3 @@ export async function DELETE(request: Request, { params }: any) {
     return NextResponse.json({ code: "INTERNAL_ERROR", message }, { status: 500 });
   }
 }
-

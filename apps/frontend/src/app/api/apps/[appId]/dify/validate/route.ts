@@ -41,7 +41,7 @@ export async function POST(request: Request, { params }: any) {
     let apiKey: string;
     try {
       apiKey = decryptString(apiKeyEnc);
-    } catch (e) {
+    } catch (_e) {
       await notifyError("Decrypt DIFY_API_KEY failed", { appId: params.appId });
       return NextResponse.json({ code: "DECRYPT_FAILED", message: "Failed to decrypt DIFY_API_KEY" }, { status: 500 });
     }
@@ -77,4 +77,3 @@ export async function POST(request: Request, { params }: any) {
     return NextResponse.json({ code: "INTERNAL_ERROR", message }, { status: 500 });
   }
 }
-

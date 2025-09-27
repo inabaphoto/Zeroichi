@@ -74,7 +74,7 @@ export async function POST(request: Request, { params }: any) {
     let enc: string;
     try {
       enc = encryptString(value!);
-    } catch (e) {
+    } catch (_e) {
       await notifyError("Env value encryption failed", { appId: params.appId, key });
       return NextResponse.json({ code: "ENCRYPTION_FAILED", message: "Failed to encrypt value" }, { status: 500 });
     }
@@ -101,4 +101,3 @@ export async function POST(request: Request, { params }: any) {
     return NextResponse.json({ code: "INTERNAL_ERROR", message }, { status: 500 });
   }
 }
-

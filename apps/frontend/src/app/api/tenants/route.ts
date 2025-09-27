@@ -68,7 +68,7 @@ export async function POST(request: Request) {
       await admin.auth.admin.updateUserById(auth.user.id, {
         user_metadata: { ...(auth.user.user_metadata ?? {}), tenant_id: tenant.id },
       });
-    } catch (e) {
+    } catch (_e) {
       // Non-fatal: continue even if metadata update fails
     }
 

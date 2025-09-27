@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     if (isNonEmptyString(body?.difyApiKey)) {
       try {
         dify_api_key_encrypted = encryptString(body!.difyApiKey!);
-      } catch (e) {
+      } catch (_e) {
         await notifyError("Encryption failed for difyApiKey", { tenantId: ctx.tenantId, actorId: ctx.userId });
         return NextResponse.json({ code: "ENCRYPTION_FAILED", message: "Failed to encrypt dify_api_key" }, { status: 500 });
       }
@@ -61,4 +61,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ code: "INTERNAL_ERROR", message }, { status: 500 });
   }
 }
-
