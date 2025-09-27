@@ -60,7 +60,7 @@ export async function GET(request: Request) {
       authApi: {
         success: !authError,
         userCount: authTest?.users?.length ?? 0,
-        error: authError instanceof Error ? authError.message : authError?.message ?? null
+        error: authError instanceof Error ? authError.message : (authError as any)?.message ?? null
       }
     });
 
