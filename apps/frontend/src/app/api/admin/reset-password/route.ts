@@ -29,7 +29,12 @@ export async function POST(request: Request) {
       page += 1;
     }
     if (!targetId) {
-      return NextResponse.json({ code: "NOT_FOUND", message: "User not found" }, { status: 404 });
+      // create user if not exists
+      const { data: created, error: createErr } = await admin.auth.admin.createUser({ email, password, email_confirm: true });
+      if (createErr || !created?.user?.id) {
+        return NextResponse.json({ code: "CREATE_FAILED", message: createErr?.message ?? "Failed to create user" }, { status: 500 });
+      }
+      targetId = created.user.id;
     }
     const { error: updErr } = await admin.auth.admin.updateUserById(targetId, { password });
     if (updErr) {
